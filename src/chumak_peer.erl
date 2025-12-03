@@ -286,10 +286,10 @@ negotiate_greetings(#state{socket=Socket,
             ?LOG_WARNING("zmq handshake timeout", #{error => negotiate_error, reason => timeout}),
             {stop, {shutdown, timeout}, State};
         error:{badmatch, {error, Reason}} ->
-            ?LOG_ERROR("zmq handshake error", #{error => negotiate_error, reason => Reason}),
+            ?LOG_ERROR("zmq handshake error", #{error => negotiate_error, peer => inet:peername(Socket), reason => Reason}),
             {stop, {error, Reason}, State};
         error:{badmatch, Error} ->
-            ?LOG_ERROR("zmq handshake error", #{error => negotiate_error, reason => Error}),
+            ?LOG_ERROR("zmq handshake error", #{error => negotiate_error, peer => inet:peername(Socket), reason => Error}),
             {stop, Error, State}
     end.
 
