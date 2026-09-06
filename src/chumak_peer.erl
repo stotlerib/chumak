@@ -67,7 +67,13 @@ connect(Type, tcp, Host, Port, Resource, Opts)
        is_list(Host),
        is_integer(Port),
        is_list(Resource) ->
-    gen_server:start_link(?MODULE, {connect, Type, Host, Port, Resource, Opts, self()}, []).
+    gen_server:start_link(?MODULE, {connect, Type, Host, Port, Resource, Opts, self()}, []);
+
+connect(Type, ipc, SocketPath, _Port, Resource, Opts)
+  when is_atom(Type),
+       is_list(SocketPath),
+       is_list(Resource) ->
+    gen_server:start_link(?MODULE, {connect, Type, {local, SocketPath}, 0, Resource, Opts, self()}, []).
 
 connect(Type, Protocol, Host, Port) ->
     connect(Type, Protocol, Host, Port, []).
